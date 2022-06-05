@@ -39,6 +39,9 @@ public class PxQ {
                         .host(host)
                         .port(port)
                         .bindingMode(RestBindingMode.json)
+                        .enableCORS(true)
+                        .corsHeaderProperty("Access-Control-Allow-Origin","*")
+                        .corsHeaderProperty("Access-Control-Allow-Headers","Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization")
                         .dataFormatProperty("prettyPrint", "true");
 
                 rest()
