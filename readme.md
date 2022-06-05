@@ -15,6 +15,16 @@ and returns any found tables as csv.
 
     java -Dhost=localhost -Dport=8083 -cp ./tabula-service-fat-0.0.1.jar nl.beroco.tools.PxQ
 
+## Upload a pdf
+
+    #!/bin/bash
+    # save as upload.sh and execute with ./upload.sh /path/to/a/pdf
+    curl -X POST \
+     -H "Content-Type: application/json" \
+     -d @- "http://localhost:8083/upload/pdf" <<EOF
+     { "commandLine": "-l  --format CSV -p 1-LAST --guess ", "base64EncodedPdf": "$(base64 -w 0 ${1})"}
+    EOF
+
 ## Install with systemd
 
 Contents of /etc/systemd/system/tabula.service:
