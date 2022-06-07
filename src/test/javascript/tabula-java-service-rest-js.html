@@ -1,0 +1,100 @@
+<!doctype html>
+  <html lang=en>
+  <head>
+    <meta charset=utf-8>
+    <title>tabula-java-rest</title>
+  </head>
+  
+  <body>
+    <h3>Get tabular data out of a pdf</h3>
+    <h4>Javascript implementation of calling a REST web-service over <a href='https://github.com/tabulapdf/tabula-java' target='_blank'>tabula-java</a>.</h4>
+
+    <ul>
+      <li>Build / place the tabula-service jar on your local machine</li>
+      <li>Start the server, on localhost, port 8083. Or adjust these settings.
+        <pre>java -cp ./tabula-service.jar -Dhost=127.0.0.1 -Dport=8083 nl.beroco.tools.PxQ</pre></li>
+      <li>Select a text based pdf file that contains tabular data</li>
+      <li>Call a REST-service on top of tabula-java</li>
+      <li>Show the returning JSON</li>
+    </ul>
+    <br>
+    
+    <div style='margin-left: 80px;'>
+      <label for="portNr" style='display: inline-block; width: 50px;'>port nr:</label>
+      <input type="number" id="portNr" name="portNr" style='width: 50px; margin-left: 10px;'>
+
+      <br><br>
+      <label for="domain" style='display: inline-block; width: 50px;'>domain:</label>
+      <input type="text" id="domain" name="domain" style='width: 100px; margin-left: 10px;'>
+
+      <p>commandline</p>
+      <pre>--stream  --pages 1-last --format CSV --guess</pre>
+      <a href='https://github.com/tabulapdf/tabula-java' target='_blank'>more info on github</a>
+    </div>
+
+    <br><br>
+    <input id="inputFile" type="file" accept="application/pdf" onchange="tabulaService()"/>
+
+    <br><br>
+    <pre id="tabOut" style='margin-left: 80px;'></pre>
+    
+    <script>
+      // defaults the domain & port nr
+      document.getElementById('portNr').value = 8083;
+      document.getElementById('domain').value = 'localhost';
+
+      function tabulaService () {
+        //Read File
+        let selectedFile = document.getElementById("inputFile").files;
+  
+        //Check File is not Empty
+        if (selectedFile.length > 0) {
+	
+          // select the very first file from list
+          var fileToLoad = selectedFile[0];
+
+          let fileReader = new FileReader();
+
+          // Convert data to base64
+          fileReader.readAsDataURL(fileToLoad);
+      
+          // Onload of file, read the file content, closure
+          fileReader.onload = function(fileLoadedEvent) {
+          
+            let base64 = fileLoadedEvent.target.result;
+          
+            // Print some base64 data in console
+            console.log( base64.substring(0, 64) + ' ...');
+            
+            // payload for the tabula REST service : commandLine & encoded pdf
+            let _data = { 
+              "commandLine": " --stream  --pages 1-last --format CSV --guess ",
+              "base64EncodedPdf": base64.split(',')[1]
+            }
+
+            let url = 'http://'
+                    + document.getElementById('domain').value
+                    + ':' + document.getElementById('portNr').value
+                    + '/upload/pdf';
+            
+            // call the REST service.
+            fetch( url, {
+              method: "POST",
+              body: JSON.stringify( _data),
+              headers: {"Content-type": "application/json;"}
+            })
+            .then( response => response.json())
+            .then( json => showJson(json.csv))
+            .catch( err => console.log( err));
+          }
+        }
+      }
+
+      function showJson ( obj) {
+        console.log( obj);
+        let str = JSON.stringify(obj, null, 2); // spacing level = 2
+        document.getElementById('tabOut').innerHTML = str;
+      }
+    </script>
+  </body>
+</html>
