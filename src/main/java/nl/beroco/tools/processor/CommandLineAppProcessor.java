@@ -31,7 +31,6 @@ public class CommandLineAppProcessor implements Processor {
     private static final int RELATIVE_AREA_CALCULATION_MODE = 0;
     private static final int ABSOLUTE_AREA_CALCULATION_MODE = 1;
     private final Logger log = LoggerFactory.getLogger(CommandLineAppProcessor.class);
-    private Appendable defaultOutput;
 
     @Override
     public void process(Exchange exchange) throws Exception {

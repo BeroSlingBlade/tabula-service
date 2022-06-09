@@ -1,8 +1,6 @@
 package nl.beroco.tools.test;
 
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import org.hamcrest.Matchers;
 import nl.beroco.tools.PxQ;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
