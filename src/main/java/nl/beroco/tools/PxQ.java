@@ -4,11 +4,9 @@ import nl.beroco.tools.json.CommandLineRequest;
 import nl.beroco.tools.json.CommandLineResponse;
 import nl.beroco.tools.processor.CommandLineAppProcessor;
 import nl.beroco.tools.processor.ErrorProcessor;
-import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.main.Main;
 import org.apache.camel.model.rest.RestBindingMode;
-import org.apache.camel.processor.DefaultExchangeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
